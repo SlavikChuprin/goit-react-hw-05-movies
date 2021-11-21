@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { useRouteMatch } from "react-router-dom";
+// import { useRouteMatch } from "react-router-dom";
 import MoviesList from "../MoviesList";
 import PageHeading from "../PageHeading";
 import fetchMovies from "../services/movies-api";
 
 export default function HomePage() {
-  const { url } = useRouteMatch();
+  // const { url } = useRouteMatch();
 
   const [movies, setMovies] = useState([]);
 
