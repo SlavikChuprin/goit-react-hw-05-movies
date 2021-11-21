@@ -38,7 +38,7 @@ export default function MovieDetailsPage() {
           <h3>Overview: </h3>
           <p>{film.overview}</p>
           <h3>Genres</h3>
-          <p>{genres}</p>
+          <p>{genres.join(", ")}</p>
         </div>
       )}
     </div>
