@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import s from "./MovieDetailsPage.module.css";
 import { NavLink, Route, useRouteMatch } from "react-router-dom";

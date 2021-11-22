@@ -1,32 +1,45 @@
-import { useState } from "react/cjs/react.development";
+import { useEffect, useState } from "react/cjs/react.development";
 import s from "./Cast.module.css";
 
 const KEY = "1e27ccd499acdd34586e1a1998d6f578";
 const URL = "https://api.themoviedb.org/3/";
+const PATH = "https://image.tmdb.org/t/p/w500";
 
-export default function Cast({ id }) {
-  const [cast, setCast] = useState([]);
-  fetch(`${URL}movie/${id}/credits?api_key=${KEY}&language=en-US`).then(
+const castFetch = (id) => {
+  return fetch(`${URL}movie/${id}/credits?api_key=${KEY}&language=en-US`).then(
     (res) => {
-      if (res.ok) {
-        setCast(res.json);
-        console.log(res.json);
-        return;
+      if (res.cast !== []) {
+        return res.json();
       }
-      if (res.cast === 0)
-        return Promise.reject(
-          new Error(`unfotently, we have not info about actors`)
-        );
+      return Promise.reject(
+        new Error("unfotently, we have not info about actors")
+      );
     }
   );
+};
+export default function Cast({ id }) {
+  const [cast, setCast] = useState(null);
+
+  useEffect(() => {
+    castFetch(id).then(({ cast }) => {
+      setCast(cast);
+    });
+  }, [id]);
+
   return (
-    <ul classname={s.castList}>
+    <ul className={s.castList}>
       {cast &&
-        cast.cast.map((actor) => (
+        cast.map((actor) => (
           <li key={actor.id}>
-            <img src={`${URL}${actor.profile_path}`} alt={actor.name} />
-            <p>{actor.name}</p>
-            <p>{actor.character}</p>
+            {actor.profile_path && (
+              <img
+                className={s.avatar}
+                src={`${PATH}${actor.profile_path}`}
+                alt={actor.name}
+              />
+            )}
+            <p>actor: {actor.name}</p>
+            <p>role: {actor.character}</p>
           </li>
         ))}
     </ul>
