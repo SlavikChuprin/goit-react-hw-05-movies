@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation, useHistory } from "react-router-dom";
 import s from "./MovieDetailsPage.module.css";
 import { NavLink, Route, useRouteMatch } from "react-router-dom";
 import Cast from "../Cast";
-
-const PATH = "https://image.tmdb.org/t/p/w500";
+import { PATH } from "../services/movies-api";
+import Reviews from "../Reviews/Reviews";
 
 export default function MovieDetailsPage() {
   const { url, path } = useRouteMatch();
+  const location = useLocation();
+  const history = useHistory();
+
   const { filmId } = useParams();
 
   const [film, setFilm] = useState(null);
@@ -20,22 +23,24 @@ export default function MovieDetailsPage() {
     setFilm(curentFilm);
 
     const genresArray = JSON.parse(window.localStorage.getItem("genres"));
-    console.log(genresArray);
+
     const genresForFilm = curentFilm.genre_ids.reduce((acc, id) => {
       const genreInFilm = genresArray.genres.find((genre) => genre.id === id);
       acc = [...acc, genreInFilm.name];
       return acc;
     }, []);
-    console.log(genresForFilm);
+
     setGenres(genresForFilm);
   }, [filmId]);
 
-  useEffect(() => {}, []);
+  const onGoBack = () => {
+    history.push(location?.state?.from ?? "/");
+  };
 
   return (
     <div>
       <div className={s.filmDetails}>
-        <button className={s.btn} type="button">
+        <button className={s.btn} type="button" onClick={onGoBack}>
           Go back
         </button>
         {film && (
@@ -71,7 +76,7 @@ export default function MovieDetailsPage() {
         <Cast id={filmId} />
       </Route>
       <Route path={`${path}/reviews`} exact>
-        <h1>reviews</h1>
+        <Reviews id={filmId} />
       </Route>
     </div>
   );

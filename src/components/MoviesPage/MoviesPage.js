@@ -1,11 +1,15 @@
 import { useState } from "react";
+import { useHistory, useLocation } from "react-router-dom";
 // import { useRouteMatch } from "react-router-dom";
 import s from "./MoviesPage.module.css";
-import fetchMovies from "../services/movies-api";
+import { fetchMovies } from "../services/movies-api";
 import MoviesList from "../MoviesList";
 
 export default function MoviesPage() {
   // const { url } = useRouteMatch();
+
+  const history = useHistory();
+  const location = useLocation();
   const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
 
@@ -15,23 +19,26 @@ export default function MoviesPage() {
       setMovies(results);
       localStorage.setItem("movies", JSON.stringify(results));
     });
+    history.push({ ...location, search: `query=${query}` });
 
     setQuery("");
   };
 
   return (
     <div className={s.search}>
-      <label>
-        <input
-          type="text"
-          className={s.searchInput}
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <button className={s.btnSearch} onClick={onSearchMovies}>
-          Search
-        </button>
-      </label>
+      <form onSubmit={onSearchMovies}>
+        <label>
+          <input
+            type="text"
+            className={s.searchInput}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <button className={s.btnSearch} onClick={onSearchMovies}>
+            Search
+          </button>
+        </label>
+      </form>
       <MoviesList movies={movies} />
     </div>
   );
