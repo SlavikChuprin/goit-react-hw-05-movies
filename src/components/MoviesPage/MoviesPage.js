@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
-// import { useRouteMatch } from "react-router-dom";
 import s from "./MoviesPage.module.css";
 import { fetchMovies } from "../services/movies-api";
 import MoviesList from "../MoviesList";
+// import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+// import Loader from "react-loader-spinner";
 
 export default function MoviesPage() {
-  // const { url } = useRouteMatch();
-
   const history = useHistory();
   const location = useLocation();
   const [query, setQuery] = useState("");
@@ -19,6 +18,7 @@ export default function MoviesPage() {
       setMovies(results);
       localStorage.setItem("movies", JSON.stringify(results));
     });
+
     history.push({ ...location, search: `query=${query}` });
 
     setQuery("");
@@ -39,6 +39,7 @@ export default function MoviesPage() {
           </button>
         </label>
       </form>
+
       <MoviesList movies={movies} />
     </div>
   );
