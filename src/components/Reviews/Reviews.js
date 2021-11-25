@@ -3,7 +3,7 @@ import { reviewsFetch } from "../services/movies-api";
 import s from "./Reviews.module.css";
 
 export default function Reviews({ id }) {
-  const [reviews, setReviews] = useState(null);
+  const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
     reviewsFetch(id).then(({ results }) => {

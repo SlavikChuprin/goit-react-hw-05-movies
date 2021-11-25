@@ -5,7 +5,7 @@ import { castFetch } from "../services/movies-api";
 const PATH = "https://image.tmdb.org/t/p/w500";
 
 export default function Cast({ id }) {
-  const [cast, setCast] = useState(null);
+  const [cast, setCast] = useState([]);
 
   useEffect(() => {
     castFetch(id).then(({ cast }) => {
