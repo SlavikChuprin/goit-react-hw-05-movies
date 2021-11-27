@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react/cjs/react.development";
+import { useState, useEffect } from "react";
 import { reviewsFetch } from "../services/movies-api";
 import s from "./Reviews.module.css";
 
