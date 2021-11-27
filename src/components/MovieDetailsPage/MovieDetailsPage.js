@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
-import { useParams, useLocation, useHistory } from "react-router-dom";
+import { Switch, useParams, useLocation, useHistory } from "react-router-dom";
 import s from "./MovieDetailsPage.module.css";
 import { NavLink, Route, useRouteMatch } from "react-router-dom";
-import Cast from "../Cast";
 import { PATH } from "../services/movies-api";
-import Reviews from "../Reviews/Reviews";
-
+import { lazy, Suspense } from "react";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import Loader from "react-loader-spinner";
+const Cast = lazy(() => import("../Cast" /* webpackChunkName: "Cast" */));
+const Reviews = lazy(() =>
+  import("../Reviews" /* webpackChunkName: "Reviews" */)
+);
 export default function MovieDetailsPage() {
   const { url, path } = useRouteMatch();
   const location = useLocation();
@@ -77,13 +81,26 @@ export default function MovieDetailsPage() {
           </NavLink>
         </li>
       </ul>
-
-      <Route path={`${path}/cast`} exact>
-        <Cast id={filmId} />
-      </Route>
-      <Route path={`${path}/reviews`} exact>
-        <Reviews id={filmId} />
-      </Route>
+      <Suspense
+        fallback={
+          <Loader
+            type="Grid"
+            color="#00BFFF"
+            height={500}
+            width={500}
+            timeout={3000}
+          />
+        }
+      >
+        <Switch>
+          <Route path={`${path}/cast`} exact>
+            <Cast id={filmId} />
+          </Route>
+          <Route path={`${path}/reviews`} exact>
+            <Reviews id={filmId} />
+          </Route>
+        </Switch>
+      </Suspense>
     </div>
   );
 }
